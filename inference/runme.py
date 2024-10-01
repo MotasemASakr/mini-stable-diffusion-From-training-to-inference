@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Lab 4, Fast Sampling
-
-# In[ ]:
-
-
 from typing import Dict, Tuple
 from tqdm import tqdm
 import torch
@@ -22,9 +14,6 @@ from diffusion_utilities import *
 
 
 # # Setting Things Up
-
-# In[ ]:
-
 
 class ContextUnet(nn.Module):
     def __init__(self, in_channels, n_feat=256, n_cfeat=10, height=28):  # cfeat - context features
@@ -104,10 +93,6 @@ class ContextUnet(nn.Module):
         out = self.out(torch.cat((up3, x), 1))
         return out
 
-
-# In[ ]:
-
-
 # hyperparameters
 
 # diffusion hyperparameters
@@ -128,9 +113,6 @@ n_epoch = 32
 lrate=1e-3
 
 
-# In[ ]:
-
-
 # construct DDPM noise schedule
 b_t = (beta2 - beta1) * torch.linspace(0, 1, timesteps + 1, device=device) + beta1
 a_t = 1 - b_t
@@ -138,17 +120,12 @@ ab_t = torch.cumsum(a_t.log(), dim=0).exp()
 ab_t[0] = 1
 
 
-# In[ ]:
-
 
 # construct model
 nn_model = ContextUnet(in_channels=3, n_feat=n_feat, n_cfeat=n_cfeat, height=height).to(device)
 
 
 # # Fast Sampling
-
-# In[ ]:
-
 
 # define sampling function for DDIM   
 # removes the noise using ddim
@@ -162,17 +139,11 @@ def denoise_ddim(x, t, t_prev, pred_noise):
     return x0_pred + dir_xt
 
 
-# In[ ]:
-
 
 # load in model weights and set to eval mode
 nn_model.load_state_dict(torch.load(f"{save_dir}/model_31.pth", map_location=device))
 nn_model.eval() 
 print("Loaded in Model without context")
-
-
-# In[ ]:
-
 
 # sample quickly using DDIM
 @torch.no_grad()
@@ -197,9 +168,6 @@ def sample_ddim(n_sample, n=20):
     return samples, intermediate
 
 
-# In[ ]:
-
-
 # visualize samples
 plt.clf()
 samples, intermediate = sample_ddim(32, n=25)
@@ -207,17 +175,10 @@ animation_ddim = plot_sample(intermediate,32,4,save_dir, "ani_run", None, save=F
 HTML(animation_ddim.to_jshtml())
 
 
-# In[ ]:
-
-
 # load in model weights and set to eval mode
 nn_model.load_state_dict(torch.load(f"{save_dir}/context_model_31.pth", map_location=device))
 nn_model.eval() 
 print("Loaded in Context Model")
-
-
-# In[ ]:
-
 
 # fast sampling algorithm with context
 @torch.no_grad()
@@ -242,9 +203,6 @@ def sample_ddim_context(n_sample, context, n=20):
     return samples, intermediate
 
 
-# In[ ]:
-
-
 # visualize samples
 plt.clf()
 ctx = F.one_hot(torch.randint(0, 5, (32,)), 5).to(device=device).float()
@@ -255,9 +213,6 @@ HTML(animation_ddpm_context.to_jshtml())
 
 # #### Compare DDPM, DDIM speed
 
-# In[ ]:
-
-
 # helper function; removes the predicted noise (but adds some noise back in to avoid collapse)
 def denoise_add_noise(x, t, pred_noise, z=None):
     if z is None:
@@ -265,10 +220,6 @@ def denoise_add_noise(x, t, pred_noise, z=None):
     noise = b_t.sqrt()[t] * z
     mean = (x - pred_noise * ((1 - a_t[t]) / (1 - ab_t[t]).sqrt())) / a_t[t].sqrt()
     return mean + noise
-
-
-# In[ ]:
-
 
 # sample using standard algorithm
 @torch.no_grad()
@@ -295,22 +246,5 @@ def sample_ddpm(n_sample, save_rate=20):
     intermediate = np.stack(intermediate)
     return samples, intermediate
 
-
-# In[ ]:
-
-
 get_ipython().run_line_magic('timeit', '-r 1 sample_ddim(32, n=25)')
 get_ipython().run_line_magic('timeit', '-r 1 sample_ddpm(32, )')
-
-
-# # Acknowledgments
-# Sprites by ElvGames, [FrootsnVeggies](https://zrghr.itch.io/froots-and-veggies-culinary-pixels) and  [kyrise](https://kyrise.itch.io/)   
-# This code is modified from, https://github.com/cloneofsimo/minDiffusion   
-# Diffusion model is based on [Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239) and [Denoising Diffusion Implicit Models](https://arxiv.org/abs/2010.02502)
-# 
-
-# In[ ]:
-
-
-
-
