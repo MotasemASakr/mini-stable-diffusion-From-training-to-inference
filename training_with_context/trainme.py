@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Lab 3, Context
-
-# In[ ]:
-
 
 from typing import Dict, Tuple
 from tqdm import tqdm
@@ -22,10 +15,6 @@ from diffusion_utilities import *
 
 
 # # Setting Things Up
-
-# In[ ]:
-
-
 class ContextUnet(nn.Module):
     def __init__(self, in_channels, n_feat=256, n_cfeat=10, height=28):  # cfeat - context features
         super(ContextUnet, self).__init__()
@@ -104,10 +93,6 @@ class ContextUnet(nn.Module):
         out = self.out(torch.cat((up3, x), 1))
         return out
 
-
-# In[ ]:
-
-
 # hyperparameters
 
 # diffusion hyperparameters
@@ -128,27 +113,17 @@ n_epoch = 32
 lrate=1e-3
 
 
-# In[ ]:
-
-
 # construct DDPM noise schedule
 b_t = (beta2 - beta1) * torch.linspace(0, 1, timesteps + 1, device=device) + beta1
 a_t = 1 - b_t
 ab_t = torch.cumsum(a_t.log(), dim=0).exp()    
 ab_t[0] = 1
 
-
-# In[ ]:
-
-
 # construct model
 nn_model = ContextUnet(in_channels=3, n_feat=n_feat, n_cfeat=n_cfeat, height=height).to(device)
 
 
 # # Context
-
-# In[ ]:
-
 
 # reset neural network
 nn_model = ContextUnet(in_channels=3, n_feat=n_feat, n_cfeat=n_cfeat, height=height).to(device)
@@ -196,8 +171,6 @@ for ep in range(n_epoch):
             os.mkdir(save_dir)
         torch.save(nn_model.state_dict(), save_dir + f"context_model_{ep}.pth")
         print('saved model at ' + save_dir + f"context_model_{ep}.pth")
-# In[ ]:
-
 
 # load in pretrain model weights and set to eval mode
 nn_model.load_state_dict(torch.load(f"{save_dir}/context_model_trained.pth", map_location=device))
@@ -207,9 +180,6 @@ print("Loaded in Context Model")
 
 # # Sampling with context
 
-# In[ ]:
-
-
 # helper function; removes the predicted noise (but adds some noise back in to avoid collapse)
 def denoise_add_noise(x, t, pred_noise, z=None):
     if z is None:
@@ -217,9 +187,6 @@ def denoise_add_noise(x, t, pred_noise, z=None):
     noise = b_t.sqrt()[t] * z
     mean = (x - pred_noise * ((1 - a_t[t]) / (1 - ab_t[t]).sqrt())) / a_t[t].sqrt()
     return mean + noise
-
-
-# In[ ]:
 
 
 # sample with context using standard algorithm
@@ -248,18 +215,12 @@ def sample_ddpm_context(n_sample, context, save_rate=20):
     return samples, intermediate
 
 
-# In[ ]:
-
-
 # visualize samples with randomly selected context
 plt.clf()
 ctx = F.one_hot(torch.randint(0, 5, (32,)), 5).to(device=device).float()
 samples, intermediate = sample_ddpm_context(32, ctx)
 animation_ddpm_context = plot_sample(intermediate,32,4,save_dir, "ani_run", None, save=False)
 HTML(animation_ddpm_context.to_jshtml())
-
-
-# In[ ]:
 
 
 def show_images(imgs, nrow=2):
@@ -271,9 +232,6 @@ def show_images(imgs, nrow=2):
         ax.set_yticks([])
         ax.imshow(img)
     plt.show()
-
-
-# In[ ]:
 
 
 # user defined context
@@ -290,9 +248,6 @@ ctx = torch.tensor([
 ]).float().to(device)
 samples, _ = sample_ddpm_context(ctx.shape[0], ctx)
 show_images(samples)
-
-
-# In[ ]:
 
 
 # mix of defined context
