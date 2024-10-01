@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Lab 2, Training
-
-# In[ ]:
-
-
 from typing import Dict, Tuple
 from tqdm import tqdm
 import torch
@@ -22,9 +14,6 @@ from diffusion_utilities import *
 
 
 # # Setting Things Up
-
-# In[ ]:
-
 
 class ContextUnet(nn.Module):
     def __init__(self, in_channels, n_feat=256, n_cfeat=10, height=28):  # cfeat - context features
@@ -104,10 +93,6 @@ class ContextUnet(nn.Module):
         out = self.out(torch.cat((up3, x), 1))
         return out
 
-
-# In[ ]:
-
-
 # hyperparameters
 
 # diffusion hyperparameters
@@ -127,19 +112,11 @@ batch_size = 100
 n_epoch = 32
 lrate=1e-3
 
-
-# In[ ]:
-
-
 # construct DDPM noise schedule
 b_t = (beta2 - beta1) * torch.linspace(0, 1, timesteps + 1, device=device) + beta1
 a_t = 1 - b_t
 ab_t = torch.cumsum(a_t.log(), dim=0).exp()    
 ab_t[0] = 1
-
-
-# In[ ]:
-
 
 # construct model
 nn_model = ContextUnet(in_channels=3, n_feat=n_feat, n_cfeat=n_cfeat, height=height).to(device)
@@ -147,27 +124,14 @@ nn_model = ContextUnet(in_channels=3, n_feat=n_feat, n_cfeat=n_cfeat, height=hei
 
 # # Training
 
-# In[ ]:
-
-
 # load dataset and construct optimizer
 dataset = CustomDataset("./sprites_1788_16x16.npy", "./sprite_labels_nc_1788_16x16.npy", transform, null_context=False)
 dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=1)
 optim = torch.optim.Adam(nn_model.parameters(), lr=lrate)
 
-
-# In[ ]:
-
-
 # helper function: perturbs an image to a specified noise level
 def perturb_input(x, t, noise):
     return ab_t.sqrt()[t, None, None, None] * x + (1 - ab_t[t, None, None, None]) * noise
-
-
-# #### This code will take hours to run on a CPU. We recommend you skip this step here and check the intermediate results below.
-# If you decide to try it, you could download to your own machine. Be sure to change the cell type. 
-# Note, the CPU run time in the course is limited so you will not be able to fully train the network using the class platform.
-# training without context code
 
 # set into train mode
 nn_model.train()
@@ -205,9 +169,6 @@ for ep in range(n_epoch):
         print('saved model at ' + save_dir + f"model_{ep}.pth")
 # # Sampling
 
-# In[ ]:
-
-
 # helper function; removes the predicted noise (but adds some noise back in to avoid collapse)
 def denoise_add_noise(x, t, pred_noise, z=None):
     if z is None:
@@ -215,10 +176,6 @@ def denoise_add_noise(x, t, pred_noise, z=None):
     noise = b_t.sqrt()[t] * z
     mean = (x - pred_noise * ((1 - a_t[t]) / (1 - ab_t[t]).sqrt())) / a_t[t].sqrt()
     return mean + noise
-
-
-# In[ ]:
-
 
 # sample using standard algorithm
 @torch.no_grad()
@@ -248,17 +205,10 @@ def sample_ddpm(n_sample, save_rate=20):
 
 # #### View Epoch 0 
 
-# In[ ]:
-
-
 # load in model weights and set to eval mode
 nn_model.load_state_dict(torch.load(f"{save_dir}/model_0.pth", map_location=device))
 nn_model.eval()
 print("Loaded in Model")
-
-
-# In[ ]:
-
 
 # visualize samples
 plt.clf()
@@ -269,17 +219,10 @@ HTML(animation_ddpm.to_jshtml())
 
 # #### View Epoch 4 
 
-# In[ ]:
-
-
 # load in model weights and set to eval mode
 nn_model.load_state_dict(torch.load(f"{save_dir}/model_4.pth", map_location=device))
 nn_model.eval()
 print("Loaded in Model")
-
-
-# In[ ]:
-
 
 # visualize samples
 plt.clf()
@@ -290,17 +233,10 @@ HTML(animation_ddpm.to_jshtml())
 
 # #### View Epoch 8
 
-# In[ ]:
-
-
 # load in model weights and set to eval mode
 nn_model.load_state_dict(torch.load(f"{save_dir}/model_8.pth", map_location=device))
 nn_model.eval()
 print("Loaded in Model")
-
-
-# In[ ]:
-
 
 # visualize samples
 plt.clf()
@@ -311,33 +247,13 @@ HTML(animation_ddpm.to_jshtml())
 
 # #### View Epoch 31 
 
-# In[ ]:
-
-
 # load in model weights and set to eval mode
 nn_model.load_state_dict(torch.load(f"{save_dir}/model_31.pth", map_location=device))
 nn_model.eval()
 print("Loaded in Model")
-
-
-# In[ ]:
-
 
 # visualize samples
 plt.clf()
 samples, intermediate_ddpm = sample_ddpm(32)
 animation_ddpm = plot_sample(intermediate_ddpm,32,4,save_dir, "ani_run", None, save=False)
 HTML(animation_ddpm.to_jshtml())
-
-
-# # Acknowledgments
-# Sprites by ElvGames, [FrootsnVeggies](https://zrghr.itch.io/froots-and-veggies-culinary-pixels) and  [kyrise](https://kyrise.itch.io/)   
-# This code is modified from, https://github.com/cloneofsimo/minDiffusion   
-# Diffusion model is based on [Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239) and [Denoising Diffusion Implicit Models](https://arxiv.org/abs/2010.02502)
-# 
-
-# In[ ]:
-
-
-
-
