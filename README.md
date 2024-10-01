@@ -1,1 +1,1 @@
-# training-small-stable-diffusion
+# mini-stable-diffusion-From-training-to-inference
