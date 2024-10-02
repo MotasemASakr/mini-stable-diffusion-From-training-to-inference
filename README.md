@@ -22,6 +22,6 @@ To run this project, you will need:
 - Transformers library
 
 ### Installation
-Clone the repository:
-git clone https://github.com/MotasemASakr/mini-stable-diffusion-From-training-to-inference.git
+Clone the repository: \n
+git clone https://github.com/MotasemASakr/mini-stable-diffusion-From-training-to-inference.git \n
 cd mini-stable-diffusion-From-training-to-inference
