@@ -21,7 +21,7 @@ To run this project, you will need:
 - PyTorch
 - Transformers library
 
-### Installation
-Clone the repository:
-git clone https://github.com/MotasemASakr/mini-stable-diffusion-From-training-to-inference.git
-cd mini-stable-diffusion-From-training-to-inference
+### Structure
+- Inference
+- Training
+- Training_with_context
