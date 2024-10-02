@@ -1,7 +1,7 @@
 # mini-stable-diffusion-From-training-to-inference
 
 ## Mini Stable Diffusion for 16x16 Sprites
-Welcome to the Mini Stable Diffusion project repository! This project focuses on training a mini model to generate 16x16 pixel sprites using Stable Diffusion. The model is trained using two different methods: with context (e.g., hero, non-hero, food, spell, side-facing) and without context.
+Welcome to the Mini Stable Diffusion project repository! This project focuses on training a mini model to generate 16x16 pixel sprites using Stable Diffusion. The model is trained using two different methods: with context (hero, non-hero, food, spell, side-facing) and without context.
 Table of Contents
 
 ### Table of Contents
@@ -22,6 +22,6 @@ To run this project, you will need:
 - Transformers library
 
 ### Structure
-- Inference
-- Training
-- Training_with_context
+- Inference: Use diffusion model to generate 16x16 sprites
+- Training: Training small diffusion model with U-net
+- Training_with_context: Training small diffusion model with U-net on sprites and context dataset to change the output based on the selected context (hero, non-hero, food, spell, side-facing)
