@@ -35,15 +35,16 @@ https://github.com/user-attachments/assets/50e5c0c9-c98e-4414-b802-a2da6f61d661
 
 ### Generated Image samples:
 The following sprites were generated using the following context (hero, non-hero, food, spell, side-facing):
-    - human hero
-    - hero and food
-    - food and spell
-    - hero and side-facing
-    - hero and non-hero
-    - hero and spell
+
 <img width="314" alt="inference_samples" src="https://github.com/user-attachments/assets/641769e5-ee27-4863-95d5-4f313979a6bf">
 
-
+- human hero
+- hero and food
+- food and spell
+- hero and side-facing
+- hero and non-hero
+- hero and spell
+  
 ### Acknowledgments
 - Sprites by ElvGames, FrootsnVeggies and kyrise
 - This code is modified from, https://github.com/cloneofsimo/minDiffusion
