@@ -34,8 +34,7 @@ https://github.com/user-attachments/assets/50e5c0c9-c98e-4414-b802-a2da6f61d661
 
 
 ### Generated Image samples:
-The following sprites were generated using the following context:
-    # hero, non-hero, food, spell, side-facing
+The following sprites were generated using the following context (hero, non-hero, food, spell, side-facing):
     - human hero
     - hero and food
     - food and spell
