@@ -9,3 +9,8 @@ Table of Contents
 - Getting Started
 - Training the Model
 - Inference
+
+### About the Project
+This project aims to leverage the power of diffusion models to generate small-scale sprite graphics suitable for video games. By training on 16x16 pixel images, we can create diverse and detailed sprite assets efficiently. The project explores two training methodologies:
+With Context: Incorporates additional labels such as character type or orientation to guide sprite generation.
+Without Context: Relies solely on the sprite images themselves without any additional guiding information.
