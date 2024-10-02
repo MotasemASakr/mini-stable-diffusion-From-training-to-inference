@@ -28,8 +28,7 @@ To run this project, you will need:
 
 ### Sampling visualization:
 
-https://github.com/user-attachments/assets/9cf00b10-4d65-480d-8af6-015e5fbf1db6
-
+![sampling_visualization](https://github.com/user-attachments/assets/6d8ad294-09e8-4cc7-8207-78dfa725a14e)
 
 
 ### Generated Image samples:
