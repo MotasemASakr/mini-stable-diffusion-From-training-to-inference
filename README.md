@@ -26,6 +26,11 @@ To run this project, you will need:
 - Training: Training small diffusion model with U-net
 - Training_with_context: Training small diffusion model with U-net on sprites and context dataset to change the output based on the selected context (hero, non-hero, food, spell, side-facing)
 
+# Sampling visualization:
+
+https://github.com/user-attachments/assets/7f39e2df-0866-4f16-a868-b9836106fae3
+
+
 ### Acknowledgments
 - Sprites by ElvGames, FrootsnVeggies and kyrise
 - This code is modified from, https://github.com/cloneofsimo/minDiffusion
